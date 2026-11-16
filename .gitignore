@@ -1,0 +1,6 @@
+data/*
+!data/README.md
+outputs/
+*.RData
+.Rhistory
+.DS_Store
