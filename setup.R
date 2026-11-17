@@ -1,1 +1,1 @@
-install.packages(c('forecast','TTR'))
+install.packages(c('forecast','TTR','quantmod'))

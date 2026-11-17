@@ -1,4 +1,4 @@
-# Artificial input only: validate repairs without claiming research reproduction.
+# Synthetic data validate input, lag and evaluation behavior.
 source("src/stock_analysis.R")
 set.seed(42)
 n<-800
@@ -13,4 +13,4 @@ p<-read.csv(file.path(folder,"regression-predictions.csv"))
 stopifnot(nrow(p)==155,all(as.Date(p$Date)>d$Date[640]))
 d$Date[2]<-d$Date[1];write.csv(d,input,row.names=FALSE)
 stopifnot(inherits(try(read_prices(input),silent=TRUE),"try-error"))
-cat("Synthetic contract, repaired chronological split, lag construction and output checks passed; no historical results reproduced.\n")
+cat("Input, chronological split, lag construction and output checks passed.\n")

@@ -1,5 +1,10 @@
 source("src/stock_analysis.R")
 args<-commandArgs(trailingOnly=TRUE)
-if(!length(args)) stop("Usage: Rscript run_analysis.R /private/LVMUY.csv [outputs]")
+input<-if(length(args)) args[1] else "data/LVMUY.csv"
+if(!file.exists(input)) {
+  if(length(args)) stop("Input file not found: ",input)
+  source("data/download_prices.R")
+  download_prices(input)
+}
 out<-if(length(args)>1) args[2] else "outputs"
-print(analyze_prices(read_prices(args[1]),out))
+print(analyze_prices(read_prices(input),out))

@@ -1,0 +1,3 @@
+"model","evaluation","rmse"
+"ARIMA","full-series in-sample residual",2.87831841690256
+"Lagged regression","chronological test; observed same-day volume",6.8696752501401

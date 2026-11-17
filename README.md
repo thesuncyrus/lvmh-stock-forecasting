@@ -1,25 +1,27 @@
 # LVMH Stock Price Forecasting
 
-Exploratory time-series modeling of LVMUY closing prices, Purdue University, October–December 2024. Author: Chau Nguyen.
+Chau Nguyen · Purdue University · October–December 2024
 
-## Problem and methods
-The project explores price trends, moving averages, ARIMA extrapolation and lagged-price regression. The retained source intends a four-year daily window (2020-10-23 to 2024-10-23), classical decomposition at frequency 360, 50/200-observation simple moving averages, automatic ARIMA on the full series, and a 60-step forecast. The regression formula is Close ~ Lag5 + Volume with an intended chronological 80/20 partition.
+## Research question
+How do trend decomposition, moving averages, ARIMA and lagged-price regression describe the behavior of LVMUY stock prices?
 
-![Recovered workflow](results/figures/workflow.svg)
+## Dataset
+The analysis uses daily LVMUY OHLCV prices for October 23, 2020 through October 23, 2024. `quantmod::getSymbols()` retrieves the series directly from Yahoo Finance. It is an online data source, not a dataset bundled with quantmod. The script caches it at data/LVMUY.csv; manual downloading is unnecessary. Yahoo can revise historical price data and corporate-action adjustments.
 
-## Restoration status
-The original input object and saved results are missing. Standalone execution was broken by an undefined variable, overwritten partitions and deleted lag columns. This repository repairs those implementation errors and requires an explicit authorized OHLCV file. It retains within-partition lag construction, so the first five rows of each partition are omitted.
+## Methods
+- Classical decomposition with frequency 360 and 50/200-observation moving averages.
+- Automatic ARIMA fitted to the complete price series, followed by a 60-step forecast.
+- Regression using Close ~ Lag5 + Volume, with a chronological 80/20 split and lags constructed within each partition.
 
-No historical numerical performance is published. The CV describes a time-ordered ARIMA-versus-regression comparison; the retained code does not establish it. ARIMA residual RMSE and regression test RMSE use different evaluation samples and must not be ranked as a common holdout comparison. Same-day realized Volume is an explanatory input and may be unavailable at a prospective forecast origin. No investment or operational outcome is claimed.
+ARIMA residual RMSE describes in-sample fit; regression RMSE describes its test partition. These are different evaluation samples, so they do not establish a common-holdout model ranking. Realized same-day volume is an explanatory input rather than a known future value. No investment return is asserted.
 
-## Reproduce a corrected run
+## Run
 ```sh
 Rscript setup.R
-Rscript run_analysis.R /private/LVMUY.csv outputs
+Rscript run_analysis.R
 ```
-The script writes a multi-page figure PDF, metrics with explicit evaluation labels, private predictions and run metadata. See data/README.md. The original frequency=360 assumption is preserved rather than silently modernized. Source parsing and synthetic contract checks can be run without original data; those are not research reproduction.
+The runner fetches prices if its default data file is absent, then writes figures, metrics and predictions to outputs/. To fetch separately, run `Rscript data/download_prices.R`. To use an existing file, run `Rscript run_analysis.R data/LVMUY.csv outputs`. Run software checks with `Rscript tests.R`.
 
-## Files and provenance
-`src/stock_analysis.R` contains input validation and the recovered analytical steps. `run_analysis.R` is the entry point. The unchanged original is retained privately. No dataset license or source license is inferred. The project is distinct from the supervised-autoencoder study.
+![Analysis workflow](results/figures/workflow.svg)
 
-[Executed validation](docs/VALIDATION.md) · [Portfolio case study](https://chau-nguyen-research.gabledmango1.chatgpt.site/lvmh.html)
+[quantmod data-source documentation](https://search.r-project.org/CRAN/refmans/quantmod/html/getSymbols.yahoo.html) · [Portfolio case study](https://chau-nguyen-research.gabledmango1.chatgpt.site/lvmh.html)
