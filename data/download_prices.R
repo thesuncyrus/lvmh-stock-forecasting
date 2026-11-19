@@ -1,10 +1,11 @@
+source("config.R")
 # Retrieve the analysis window directly in R; no manual CSV download is required.
-download_prices <- function(destination="data/LVMUY.csv", from="2020-10-23", through="2024-10-23") {
+download_prices <- function(destination="data/LVMUY.csv", from=lvmh_config$from, through=lvmh_config$through) {
   if (!requireNamespace("quantmod",quietly=TRUE)) stop("Install quantmod with setup.R.")
   from <- as.Date(from); through <- as.Date(through)
   if (is.na(from) || is.na(through) || from>=through) stop("Invalid date range.")
   # Yahoo's upper bound is exclusive, so request the day after the final observation date.
-  prices <- quantmod::getSymbols("LVMUY",src="yahoo",from=from,to=through+1,
+  prices <- quantmod::getSymbols(lvmh_config$symbol,src="yahoo",from=from,to=through+1,
                                 auto.assign=FALSE)
   result <- data.frame(Date=as.Date(zoo::index(prices)),
     Open=as.numeric(quantmod::Op(prices)),High=as.numeric(quantmod::Hi(prices)),
