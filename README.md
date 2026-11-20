@@ -6,14 +6,14 @@ Chau Nguyen · Purdue University · October–December 2024
 How do trend decomposition, moving averages, ARIMA and lagged-price regression describe the behavior of LVMUY stock prices?
 
 ## Dataset
-The analysis uses daily LVMUY OHLCV prices for October 23, 2020 through October 23, 2024. `quantmod::getSymbols()` retrieves the series directly from Yahoo Finance. It is an online data source, not a dataset bundled with quantmod. The script caches it at data/LVMUY.csv; manual downloading is unnecessary. Yahoo can revise historical price data and corporate-action adjustments.
+The analysis uses daily LVMUY OHLCV prices for October 23, 2020 through October 23, 2024. `quantmod::getSymbols()` retrieves the series directly from Yahoo Finance. It is an online data source, not a dataset bundled with quantmod. The script caches it at data/LVMUY.csv; manual downloading is unnecessary.
 
 ## Methods
 - Classical decomposition with frequency 360 and 50/200-observation moving averages.
 - Automatic ARIMA fitted to the complete price series, followed by a 60-step forecast.
 - Regression using Close ~ Lag5 + Volume, with a chronological 80/20 split and lags constructed within each partition.
 
-ARIMA residual RMSE describes in-sample fit; regression RMSE describes its test partition. These are different evaluation samples, so they do not establish a common-holdout model ranking. Realized same-day volume is an explanatory input rather than a known future value. No investment return is asserted.
+The analysis reports in-sample residual RMSE for ARIMA and test-set RMSE for the regression. The regression uses realized same-day volume.
 
 ## Run
 ```sh
@@ -24,4 +24,4 @@ The runner fetches prices if its default data file is absent, then writes figure
 
 ![Analysis workflow](results/figures/workflow.svg)
 
-[quantmod data-source documentation](https://search.r-project.org/CRAN/refmans/quantmod/html/getSymbols.yahoo.html) · [Portfolio case study](https://chau-nguyen-research.gabledmango1.chatgpt.site/lvmh.html)
+[quantmod data-source documentation](https://search.r-project.org/CRAN/refmans/quantmod/html/getSymbols.yahoo.html) · [Portfolio case study](https://thesuncyrus.github.io/lvmh.html)
